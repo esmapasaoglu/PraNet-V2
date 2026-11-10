@@ -144,13 +144,14 @@ class PVT_PraNet_V2(nn.Module):
         
         # ---- PVT_V2_B2 Backbone ----
         self.backbone = pvt_v2_b2()  # [64, 128, 320, 512]
-        path = './models/pvt_v2_b2.pth'
-        save_model = torch.load(path)
+        # [proje] path relative to this file (was './models/...', i.e. cwd-dependent)
+        path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..', 'models', 'pvt_v2_b2.pth')
+        save_model = torch.load(path, map_location='cpu')
         model_dict = self.backbone.state_dict()
         state_dict = {k: v for k, v in save_model.items() if k in model_dict.keys()}
         model_dict.update(state_dict)
         self.backbone.load_state_dict(model_dict)
-        
+
         # ---- Res2Net Backbone ----
         # self.backbone = res2net50_v1b_26w_4s(pretrained=True)
 

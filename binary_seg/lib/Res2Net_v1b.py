@@ -1,3 +1,4 @@
+import os
 import torch.nn as nn
 import math
 import torch.utils.model_zoo as model_zoo
@@ -195,7 +196,11 @@ def res2net50_v1b_26w_4s(pretrained=False, **kwargs):
         # model_state = torch.load('/media/nercms/NERCMS/GepengJi/Medical_Seqmentation/CRANet/models/res2net50_v1b_26w_4s-3cf99910.pth')
         
         # model_state=torch.load('./models/res2net50_v1b_26w_4s-3cf99910.pth') # 修改
-        model_state=torch.load('../models/res2net50_v1b_26w_4s-3cf99910.pth') # 修改
+        # [proje] Path made relative to this file so it resolves to binary_seg/models/
+        # regardless of the working directory (the original '../models/' did not match the README).
+        _here = os.path.dirname(os.path.abspath(__file__))
+        model_state = torch.load(os.path.join(_here, '..', 'models', 'res2net50_v1b_26w_4s-3cf99910.pth'),
+                                 map_location='cpu')
         
         model.load_state_dict(model_state)
         # lib.load_state_dict(model_zoo.load_url(model_urls['res2net50_v1b_26w_4s']))
