@@ -1,6 +1,8 @@
 import numpy as np
-from scipy.ndimage.morphology import distance_transform_edt
-from scipy.ndimage.filters import convolve
+# [proje] scipy.ndimage.morphology / scipy.ndimage.filters are deprecated namespaces;
+# importing from scipy.ndimage directly works on old and new SciPy versions.
+from scipy.ndimage import distance_transform_edt
+from scipy.ndimage import convolve
 
 def Object(pred, gt):
     x = np.mean(pred[gt == 1])
