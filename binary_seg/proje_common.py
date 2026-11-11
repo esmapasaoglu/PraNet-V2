@@ -117,6 +117,8 @@ def load_weights(model, path, allowed_missing_prefixes=('conv.',)):
     state = torch.load(path, map_location='cpu', weights_only=False)
     if isinstance(state, dict) and 'model' in state and 'optimizer' in state:
         state = state['model']  # our own resumable checkpoint format
+    if state and all(k.startswith('module.') for k in state):
+        state = {k[len('module.'):]: v for k, v in state.items()}  # saved from DataParallel
     result = model.load_state_dict(state, strict=False)
     missing = [k for k in result.missing_keys if not k.startswith(tuple(allowed_missing_prefixes))]
     report = {
