@@ -136,6 +136,10 @@ def main():
     data_gen.manual_seed(opt.seed)
 
     image_root = '{}/images/'.format(opt.train_path)
+    if not os.path.isdir(image_root) and os.path.isdir('{}/image/'.format(opt.train_path)):
+        # The official TrainDataset.zip names the folder 'image' (singular), while
+        # MyTrain_med.py expects 'images'; accept both.
+        image_root = '{}/image/'.format(opt.train_path)
     gt_root = '{}/masks/'.format(opt.train_path)
     dataset = PolypDataset(image_root, gt_root, opt.trainsize)
     device = get_device()
